@@ -37,4 +37,23 @@ app.layout = html.Div([
 def ordenar_df_por_recuento(df, columna_recuento, ascendente=True):
     return df.sort_values(by=columna_recuento, ascending=ascendente)
 
+# Callback para actualizar los gráficos en función del candidato seleccionado
+@app.callback(
+    [Output('grafico-retweets', 'figure'),
+     Output('grafico-likes', 'figure')],
+    Input('selector-candidato', 'value')
+)
+def actualizar_graficos(candidato):
+    if candidato == 'sandra':
+        df = df_sandra
+        titulo_retweets = 'Recuento de Retweets para Sandra Torres'
+        titulo_likes = 'Recuento de Likes para Sandra Torres'
+    else:
+        df = df_bernardo
+        titulo_retweets = 'Recuento de Retweets para Bernardo Arevalo'
+        titulo_likes = 'Recuento de Likes para Bernardo Arevalo'
 
+
+
+if _name_ == '_main_':
+    app.run_server(debug=True, port=8054)
