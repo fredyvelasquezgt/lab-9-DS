@@ -36,7 +36,6 @@ app.layout = html.Div([
 # Función para ordenar el DataFrame en función del recuento (retweets o likes)
 def ordenar_df_por_recuento(df, columna_recuento, ascendente=True):
     return df.sort_values(by=columna_recuento, ascending=ascendente)
-
 # Callback para actualizar los gráficos en función del candidato seleccionado
 @app.callback(
     [Output('grafico-retweets', 'figure'),
@@ -53,7 +52,21 @@ def actualizar_graficos(candidato):
         titulo_retweets = 'Recuento de Retweets para Bernardo Arevalo'
         titulo_likes = 'Recuento de Likes para Bernardo Arevalo'
 
+    # Ordena el DataFrame por recuento de retweets y likes de forma descendente
+    df_ordenado_retweets = ordenar_df_por_recuento(df, 'retweetCount', ascendente=False)
+    df_ordenado_likes = ordenar_df_por_recuento(df, 'likeCount', ascendente=False)
 
+    # Gráfico de barras para el recuento de retweets
+    figura_retweets = px.bar(df_ordenado_retweets, x='user', y='retweetCount', title=titulo_retweets)
+    figura_retweets.update_xaxes(title='Usuarios')
+    figura_retweets.update_yaxes(title='Recuento de Retweets')
+
+    # Gráfico de barras para el recuento de likes
+    figura_likes = px.bar(df_ordenado_likes, x='user', y='likeCount', title=titulo_likes)
+    figura_likes.update_xaxes(title='Usuarios')
+    figura_likes.update_yaxes(title='Recuento de Likes')
+
+    return figura_retweets, figura_likes
 
 if _name_ == '_main_':
     app.run_server(debug=True, port=8054)
